@@ -18,7 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
     <button class='btn-success' id=${quote.id}>Likes: <span>0</span></button>
     <button class='btn-danger'>Delete</button>
     </blockquote>`
-    quoteList.appendChild(card)   
+    quoteList.appendChild(card) 
+    
+    const delBtn = card.querySelector('.btn-danger')
+    delBtn.addEventListener('click', () => {
+      card.remove()
+      deleteQuote(quote.id)
+    }) 
   }  
   
   const form = document.getElementById('new-quote-form')
@@ -53,6 +59,17 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(resp => resp.json())
     .then(newQuote => renderQuotes(newQuote))
+  }
+
+  function deleteQuote(id) {
+    fetch(`http://localhost:3000/quotes/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    })
+    .then(resp => resp.json())
+    //.then(quote => console.log(quote))
   }
 })
     
