@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }))
 
   function renderQuotes(quote) {
+    //console.log(quote)
     const quoteList = document.getElementById('quote-list')
     const card = document.createElement('li')
     card.className = 'quote-card'
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <p class="mb-0">${quote.quote}</p>
     <footer class="blockquote-footer">${quote.author}</footer>
     <br>
-    <button class='btn-success' id=${quote.id}>Likes: <span>0</span></button>
+    <button class='btn-success' id=${quote.id}>Likes: <span>${quote.likes}</span></button> 
     <button class='btn-danger'>Delete</button>
     </blockquote>`
     quoteList.appendChild(card) 
@@ -25,15 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
       card.remove()
       deleteQuote(quote.id)
     }) 
+
+    const likeBtn = card.querySelector('.btn-success')
+    likeBtn.addEventListener('click', () => {
+      let span = card.querySelector('span')
+      span.textContent = parseInt(span.textContent) + 1
+      //console.log(typeof span.textContent)
+      updateLikes(quote)
+    })
   }  
   
   const form = document.getElementById('new-quote-form')
 
   fetch('http://localhost:3000/quotes')
   .then(resp => resp.json())
-  .then(quotesArr => addSubmit(quotesArr))
+  .then(quotesArr => {
+    handleSubmit(quotesArr)
+  })
 
-  function addSubmit(quotesArr) {
+  function handleSubmit(quotesArr) {
     form.addEventListener('submit', e  => {
       e.preventDefault()
       quotesArr.forEach(quote => {
@@ -43,12 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
         quote: e.target.quote.value,
         author: e.target.author.value,
       }
-      postNewQuote(newQuote)
+      createQuote(newQuote)
       e.target.reset()
     })
   }
-
-  function postNewQuote(newQuote) {
+  
+  function createQuote(newQuote) {
     fetch('http://localhost:3000/quotes', { 
       method: 'POST',
       headers: {
@@ -70,6 +81,23 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .then(resp => resp.json())
     //.then(quote => console.log(quote))
+  }
+
+  function updateLikes(quote) {
+    fetch('http://localhost:3000/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({quoteId: quote.id})
+    })
+    .then(resp => resp.json())
+    .then(data => {
+      fetch(`http://localhost:3000/likes?quoteId=${quote.id}`)
+      .then(resp => resp.json())
+      .then(like => console.log(like))
+    })
   }
 })
     
