@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     <p class="mb-0">${quote.quote}</p>
     <footer class="blockquote-footer">${quote.author}</footer>
     <br>
-    <button class='btn-success' id=${quote.id}>Likes: <span>${quote.likes}</span></button> 
+    <button class='btn-success' id=${quote.id}>Likes: <span>${quote.likes.length}</span></button> 
     <button class='btn-danger'>Delete</button>
     </blockquote>`
     quoteList.appendChild(card) 
@@ -53,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const newQuote = {
         quote: e.target.quote.value,
         author: e.target.author.value,
+        likes: []
       }
       createQuote(newQuote)
       e.target.reset()
@@ -93,10 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
       body: JSON.stringify({quoteId: quote.id})
     })
     .then(resp => resp.json())
-    .then(data => {
+    .then(likeObj => {
       fetch(`http://localhost:3000/likes?quoteId=${quote.id}`)
       .then(resp => resp.json())
-      .then(like => console.log(like))
+      .then(likeArr => {
+        //console.log(likeArr)
+        const likeBtn = document.getElementById(`${quote.id}`)
+        //console.log(likeBtn)
+        likeBtn.childNodes[1].textContent = `${likeArr.length}`
+      })
     })
   }
 })
@@ -108,5 +114,4 @@ document.addEventListener('DOMContentLoaded', () => {
   
 
   
-
 

@@ -56,14 +56,10 @@
       "author": "Ann Richards"
     },
     {
-      "quote": "So sei que nada sei.",
-      "author": "Socrates",
-      "id": 12
-    },
-    {
       "quote": "Penso, logo existo.",
       "author": "Descartes",
-      "id": 13
+      "likes": [],
+      "id": 12
     }
   ],
   "likes": [
@@ -82,24 +78,8 @@
       "id": 3
     },
     {
-      "quoteId": 1,
+      "quoteId": 12,
       "id": 4
-    },
-    {
-      "quoteId": 1,
-      "id": 5
-    },
-    {
-      "quoteId": 2,
-      "id": 6
-    },
-    {
-      "quoteId": 2,
-      "id": 7
-    },
-    {
-      "quoteId": 2,
-      "id": 8
     }
   ]
 }
